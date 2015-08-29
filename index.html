@@ -1,91 +1,97 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
-	
+
 	<title>Phaser-Demo</title>
 	<script type="text/javascript" src="phaser.js"></script>
 </head>
+
 <body>
 	<script type="text/javascript">
-
-	var game = new Phaser.Game(480, 800, 
-		Phaser.AUTO, 
-		'',
-		{preload:preload, update:update, create:create}
-		);
-	var elapsed = 0;
-	var group = null;
-	var lifes = 5;
-	var gameStarted = false;
-
-	function preload(){
-		game.load.image('bg', 'assets/scene1.png');
-		game.load.image('btnStart', 'assets/btn_play.png');
-		game.load.image('gameOver', 'assets/game_over.png');
-		game.load.image('monster','assets/walk0001.png')
-		game.load.image('slime','assets/slime_normal.png')
-	}
-
-	function create(){
-		var bg = game.add.sprite(0, 0, 'bg');
-		var btnStart = game.add.button(0,0,'btnStart', startGame);
-		//btnStart.bringToTop();
-		
-		btnStart.anchor.setTo(0.5, 0.5);
-		btnStart.x = game.world.centerX;
-		btnStart.y = game.world.centerY;
-
-		group = game.add.group();
-	}
-
-	function update(){
-
-		if (!gameStarted) {
-			return;
-		}
-		//console.log(game.time.elapsed);
-		elapsed += game.time.elapsed;
-		if (elapsed >= 1000) {
-			elapsed = 0;
-			var n = game.rnd.integerInRange(0, 9);
-			if ( n >= 7) {
-				var tmp = game.add.sprite(0,0,'slime');
-			} else {
-				var tmp = game.add.sprite(0,0,'monster');
+		var game = new Phaser.Game(480, 800,
+			Phaser.AUTO,
+			'', {
+				preload: preload,
+				update: update,
+				create: create
 			}
-			tmp.x = game.rnd.realInRange(0, game.width - tmp.width);
-			//tmp.y = game.rnd.realInRange(0, game.height - tmp.height);
-			tmp.y = 0;
-			tmp.events.onInputDown.add(destroy)
-			tmp.inputEnabled = true;
-			tmp.checkWorldBounds = true;
-			tmp.outOfBoundsKill = true;
-			tmp.events.onOutOfBounds.add(reduceLife);
-			group.add(tmp);
+		);
+		var elapsed = 0;
+		var group = null;
+		var lifes = 5;
+		var gameStarted = false;
+
+		function preload() {
+			game.load.image('bg', 'assets/scene1.png');
+			game.load.image('btnStart', 'assets/btn_play.png');
+			game.load.image('gameOver', 'assets/game_over.png');
+			game.load.image('monster', 'assets/walk0001.png')
+			game.load.image('slime', 'assets/slime_normal.png')
 		}
-		group.forEach(function(sprite) {
-			sprite.y += 3;
-			/*if (sprite.y > game.height) {
-				console.log(group.length);
-				sprite.destroy();
-				//sprite.kill() desactiva el objeto, pero lo mantiene en memoria
-			}*/
-		});
-	}
 
-	function startGame(start) {
-		start.destroy();
-		gameStarted = true;
-	}
+		function create() {
+			var bg = game.add.sprite(0, 0, 'bg');
+			var btnStart = game.add.button(0, 0, 'btnStart', startGame);
+			//btnStart.bringToTop();
 
-	function destroy (sprite) {
-		sprite.destroy();
-	}
+			btnStart.anchor.setTo(0.5, 0.5);
+			btnStart.x = game.world.centerX;
+			btnStart.y = game.world.centerY;
 
-	function reduceLife() {
-		console.log("Muere");
-	}
+			group = game.add.group();
+		}
+
+		function update() {
+
+			if (!gameStarted) {
+				return;
+			}
+			//console.log(game.time.elapsed);
+			elapsed += game.time.elapsed;
+			if (elapsed >= 1000) {
+				elapsed = 0;
+				var n = game.rnd.integerInRange(0, 9);
+				if (n >= 7) {
+					var tmp = game.add.sprite(0, 0, 'slime');
+				}
+				else {
+					var tmp = game.add.sprite(0, 0, 'monster');
+				}
+				tmp.x = game.rnd.realInRange(0, game.width - tmp.width);
+				//tmp.y = game.rnd.realInRange(0, game.height - tmp.height);
+				tmp.y = 0;
+				tmp.events.onInputDown.add(destroy)
+				tmp.inputEnabled = true;
+				tmp.checkWorldBounds = true;
+				tmp.outOfBoundsKill = true;
+				tmp.events.onOutOfBounds.add(reduceLife);
+				group.add(tmp);
+			}
+			group.forEach(function(sprite) {
+				sprite.y += 3;
+				/*if (sprite.y > game.height) {
+					console.log(group.length);
+					sprite.destroy();
+					//sprite.kill() desactiva el objeto, pero lo mantiene en memoria
+				}*/
+			});
+		}
+
+		function startGame(start) {
+			start.destroy();
+			gameStarted = true;
+		}
+
+		function destroy(sprite) {
+			sprite.destroy();
+		}
+
+		function reduceLife() {
+			console.log("Muere");
+		}
 	</script>
 </body>
+
 </html>
